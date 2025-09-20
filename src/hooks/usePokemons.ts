@@ -11,8 +11,8 @@ export const usePokemonDetail = (
   return useQuery<PokemonDetail, Error>({
     queryKey: [QUERY_KEYS.POKEMON.DETAIL, url],
     queryFn: () => pokemonService.getDetail(url),
+    staleTime: APP_CONFIG.CACHE_TIME.MEDIUM,
     enabled: !!url,
-    staleTime: 1000 * 60 * 5,
   });
 };
 
@@ -27,7 +27,7 @@ export const usePokemonList = (page: number) => {
         total: list.count,
       };
     },
-    staleTime: 1000 * 60 * 2,
+    staleTime: APP_CONFIG.CACHE_TIME.MEDIUM,
   });
 };
 
@@ -36,7 +36,7 @@ export const usePokemonByTypes = (types: string[]) => {
     queries: types.map((type) => ({
       queryKey: [QUERY_KEYS.POKEMON.BY_TYPE, type],
       queryFn: () => pokemonService.getByType(type),
-      staleTime: 1000 * 60 * 2,
+      staleTime: APP_CONFIG.CACHE_TIME.MEDIUM,
       enabled: !!type,
     })),
   });
