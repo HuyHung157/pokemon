@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, memo, useEffect } from "react";
+import { useState, memo, useEffect, Suspense } from "react";
 import {
   usePokemonByTypes,
   usePokemonList,
@@ -45,16 +45,18 @@ function PokemonPageContent() {
     usePokemonByTypes(activeTypes);
 
   const total = listData?.total ?? 0;
-  const totalCurrent = activeTypes.length > 0 ? typeTotal : listData?.total || 0;
-  const results = activeTypes.length > 0
-    ? typeResults
-        ?.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
-        .map((p: PokemonByTypeItem) => p.pokemon) || []
-    : listData?.results || [];
+  const totalCurrent =
+    activeTypes.length > 0 ? typeTotal : listData?.total || 0;
+  const results =
+    activeTypes.length > 0
+      ? typeResults
+          ?.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+          .map((p: PokemonByTypeItem) => p.pokemon) || []
+      : listData?.results || [];
 
   const updateURL = (newPage: number, newTypes: string[]) => {
     if (!mounted) return;
-    
+
     const params = new URLSearchParams();
     if (newTypes.length > 0) params.set("type", newTypes.join(","));
     params.set("page", String(newPage));
@@ -78,12 +80,12 @@ function PokemonPageContent() {
 
   useEffect(() => {
     if (!mounted) return;
-    
+
     const urlPage = Number(searchParams.get("page") || "1");
     const urlTypes = searchParams.get("type")
       ? searchParams.get("type")!.split(",")
       : [];
-    
+
     setPage(urlPage);
     setActiveTypes(urlTypes);
   }, [searchParams, mounted]);
@@ -126,7 +128,13 @@ function PokemonPageContent() {
 export default function PokemonPage() {
   return (
     <QueryClientProvider client={queryClient}>
-      <PokemonPageContent />
+      <Suspense
+        fallback={
+          <div className="flex justify-center py-10">Loading page...</div>
+        }
+      >
+        <PokemonPageContent />
+      </Suspense>
     </QueryClientProvider>
   );
 }
