@@ -1,7 +1,8 @@
 import axios from "axios";
+import { APP_CONFIG } from "./const";
 
 const axiosClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE,
+  baseURL: APP_CONFIG.API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
