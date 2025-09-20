@@ -20,7 +20,7 @@ export default function PokemonCard({ url, name }: Props) {
   if (!pokemon) return null;
 
   return (
-    <div className="flex flex-col items-center justify-between p-2 ">
+    <div className="flex flex-col items-center justify-between">
       <h3 className="">{name}</h3>
       <Image
         className="w-20"
